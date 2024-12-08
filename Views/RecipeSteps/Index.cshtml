@@ -1,0 +1,67 @@
+﻿@model PagedList.Core.IPagedList<courseA4.Models.RecipeStep>
+@using PagedList.Core;
+
+@{
+    ViewData["Title"] = "Recipe Steps";
+}
+
+<h1>Recipe Steps</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().StepNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Description)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Quantity)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Ingredient.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Recipe.RecipeId)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.StepNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                <td>@Html.DisplayFor(modelItem => item.Ingredient.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Recipe.RecipeId)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StepId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StepId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StepId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination">
+    @if (Model.HasPreviousPage)
+    {
+        <a asp-action="Index" asp-route-page="1" class="btn btn-primary">First</a>
+        <a asp-action="Index" asp-route-page="@(Model.PageNumber - 1)" class="btn btn-primary">Previous</a>
+    }
+    else
+    {
+        <button class="btn btn-secondary" disabled>First</button>
+        <button class="btn btn-secondary" disabled>Previous</button>
+    }
+
+    <span>Page @Model.PageNumber of @Model.PageCount</span>
+
+    @if (Model.HasNextPage)
+    {
+        <a asp-action="Index" asp-route-page="@(Model.PageNumber + 1)" class="btn btn-primary">Next</a>
+        <a asp-action="Index" asp-route-page="@(Model.PageCount)" class="btn btn-primary">Last</a>
+    }
+    else
+    {
+        <button class="btn btn-secondary" disabled>Next</button>
+        <button class="btn btn-secondary" disabled>Last</button>
+    }
+</div>

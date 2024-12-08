@@ -1,0 +1,87 @@
+﻿@model courseA4.Models.RecipeCreateViewModel
+
+@{
+    ViewData["Title"] = "Добавление рецепта";
+}
+
+<h1>Create Recipe</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CookingTime"></label>
+        <input asp-for="CookingTime" class="form-control" type="number" />
+        <span asp-validation-for="CookingTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DifficultyLevel"></label>
+        <input asp-for="DifficultyLevel" class="form-control" />
+    </div>
+
+    <h2>Steps</h2>
+    <div id="steps-container">
+        <div class="form-group">
+            <label>Шаг: 1</label>
+            <input type="hidden" name="Steps[0].StepNumber" class="form-control"/>
+            <input name="Steps[0].Description" class="form-control" placeholder="Step Description" />
+        </div>
+    </div>
+    <button type="button" id="add-step" class="btn btn-secondary">Add Step</button>
+
+    <h2>Ingredients</h2>
+    <div id="ingredients-container">
+        <div class="form-group">
+            <input name="Ingredients[0].Name" class="form-control" placeholder="Ingredient Name" />
+            <input name="Ingredients[0].Quantity" class="form-control" placeholder="Quantity" />
+        </div>
+    </div>
+    <button type="button" id="add-ingredient" class="btn btn-secondary">Add Ingredient</button>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <script>
+        let stepIndex = 2;
+        let ingredientIndex = 1;
+
+        document.getElementById('add-step').addEventListener('click', () => 
+        {
+            const container = document.getElementById('steps-container');
+            const stepDiv = document.createElement('div');
+            stepDiv.classList.add('form-group');
+            stepDiv.innerHTML = `
+                    <label>Шаг ${stepIndex}</label>
+                    <input type="hidden" name="Steps[${stepIndex - 1}].StepNumber" value="${stepIndex}" />
+                    <input name="Steps[${stepIndex - 1}].Description" class="form-control" placeholder="Step Description" />
+                `;
+            container.appendChild(stepDiv);
+            stepIndex++;
+        });
+
+        document.getElementById('add-ingredient').addEventListener('click', () => 
+        {
+            const container = document.getElementById('ingredients-container');
+            const ingredientDiv = document.createElement('div');
+            ingredientDiv.classList.add('form-group');
+            ingredientDiv.innerHTML = `
+                    <label>Ingredient ${ingredientIndex}</label>
+                    <input name="Ingredients[${ingredientIndex - 1}].Name" class="form-control" placeholder="Ingredient Name" />
+                    <input name="Ingredients[${ingredientIndex - 1}].Quantity" class="form-control" placeholder="Quantity" />
+                `;
+            container.appendChild(ingredientDiv);
+            ingredientIndex++;
+        });
+    </script>
+}

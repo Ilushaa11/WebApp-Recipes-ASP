@@ -1,0 +1,32 @@
+﻿@model IEnumerable<courseA4.Models.RecipeDetail>
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+
+@if (Model != null && Model.Any())
+{
+    <h2>@Model.First().RecipeName</h2>
+    <p><strong>Описание:</strong> @Model.First().RecipeDescription</p>
+    <p><strong>Время приготовления:</strong> @Model.First().CookingTime мин.</p>
+    <p><strong>Сложность:</strong> @Model.First().DifficultyLevel</p>
+
+    <h4>Шаги:</h4>
+    <ol>
+        @foreach (var detail in Model.OrderBy(m => m.StepNumber))
+        {
+            <li>
+                <p><strong>Шаг: @detail.StepNumber:</strong> @detail.StepDescription</p>
+                @if (!string.IsNullOrEmpty(detail.IngredientName))
+                {
+                    <p><strong>  Ингредиент:</strong> @detail.IngredientName (@detail.IngredientQuantity)</p>
+                }
+            </li>
+        }
+    </ol>
+}
+else
+{
+    <p>По данному рецепту ничего не найдено.</p>
+}
