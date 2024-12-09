@@ -69,6 +69,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Ingredients/Create
+        [CustomAuthorize("User", "Admin")]
         public IActionResult Create()
         {
             ViewData["TypeId"] = new SelectList(_context.IngredientTypes, "TypeId", "TypeId");

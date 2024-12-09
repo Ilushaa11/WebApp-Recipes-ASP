@@ -44,8 +44,8 @@ namespace courseA4.Controllers
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Login),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()), 
-                new Claim(ClaimTypes.Role, user.Access)  
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Role, user.Access)
             };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -65,6 +65,7 @@ namespace courseA4.Controllers
         }
 
 
+
         // POST: /Account/LogOff
         [HttpPost]
         [Authorize]
@@ -72,6 +73,58 @@ namespace courseA4.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: /Account/Register
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // Post: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Login == model.Username);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("", "Пользователь с таким именем уже существует.");
+                return View(model);
+            }
+
+            var user = new User
+            {
+                Login = model.Username,
+                PasswordHash = model.Password,
+                Email = model.Email,
+                Access = "User"
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var claims = new List<Claim>
+        {
+                new Claim(ClaimTypes.Name, user.Login),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Role, user.Access)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "Login");
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync(claimsPrincipal);
+
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }

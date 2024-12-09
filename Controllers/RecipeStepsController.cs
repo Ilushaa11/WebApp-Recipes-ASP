@@ -176,7 +176,6 @@ namespace courseA4.Controllers
         // POST: RecipeSteps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [CustomAuthorize("Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var recipeStep = await _context.RecipeSteps.FindAsync(id);

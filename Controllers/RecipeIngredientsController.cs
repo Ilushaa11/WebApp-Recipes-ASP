@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using courseA4.Data;
 using courseA4.Models;
 using PagedList.Core;
+using courseA4.Services;
 
 
 namespace courseA4.Controllers
@@ -151,6 +152,7 @@ namespace courseA4.Controllers
         }
 
         // GET: RecipeIngredients/Delete/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

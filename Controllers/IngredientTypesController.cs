@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using courseA4.Data;
 using courseA4.Models;
+using courseA4.Services;
 
 namespace courseA4.Controllers
 {
@@ -62,6 +63,7 @@ namespace courseA4.Controllers
         }
 
         // GET: IngredientTypes/Create
+        [CustomAuthorize("Admin")]
         public IActionResult Create()
         {
             return View();
@@ -84,6 +86,7 @@ namespace courseA4.Controllers
         }
 
         // GET: IngredientTypes/Edit/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -135,6 +138,7 @@ namespace courseA4.Controllers
         }
 
         // GET: IngredientTypes/Delete/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
