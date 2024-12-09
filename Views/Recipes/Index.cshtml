@@ -16,6 +16,9 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Поиск</button>
+
+    <a asp-action="Create">Create New</a>
+
 </form>
 
 <table class="table">
@@ -31,7 +34,7 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["CookingTimeSortParam"]">Время приготовления</a>
             </th>
             <th>Автор</th>
-            <th></th>
+            <th> ужс</th>
         </tr>
     </thead>
     <tbody>
@@ -41,7 +44,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
                 <td>@Html.DisplayFor(modelItem => item.CookingTime)</td>
-                <td>@Html.DisplayFor(modelItem => item.User.Login ?? " - ")</td>
+                <td>@Html.DisplayFor(modelItem => item.User.Email )</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.RecipeId">Изменить</a> |
                     <a asp-action="Details" asp-route-id="@item.RecipeId">Детали</a> |

@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using courseA4.Data;
+using courseA4.Services;
 using courseA4.Models;
 using Microsoft.Data.SqlClient;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace courseA4.Controllers
 {
@@ -21,6 +24,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Recipes
+        [AllowAnonymous]
         [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Client)]
         public async Task<IActionResult> Index(string sortOrder, string searchString, string ingredientFilter, int? page)
         {
@@ -103,6 +107,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Recipes/Create
+        [CustomAuthorize("User", "Admin")]
         public IActionResult Create()
         {
             return View(new RecipeCreateViewModel());
@@ -113,18 +118,19 @@ namespace courseA4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("User", "Admin")]
         public async Task<IActionResult> Create(RecipeCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
-                
+
                 var recipe = new Recipe
                 {
                     Name = model.Name,
                     Description = model.Description,
                     CookingTime = model.CookingTime,
                     DifficultyLevel = model.DifficultyLevel,
-                    UserId =  1 //model.UserId  пока 1, потом добавить, что ID пользователя передается
+                    UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) //model.UserId  пока 1, потом добавить, что ID пользователя передается upd Добавить проверку потом на ненулевое
                 };
 
                 if (model.Steps != null && model.Steps.Any())
@@ -182,6 +188,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Recipes/Edit/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -203,6 +210,7 @@ namespace courseA4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("RecipeId,Name,Description,CookingTime,DifficultyLevel,UserId")] Recipe recipe)
         {
             if (id != recipe.RecipeId)
@@ -235,6 +243,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Recipes/Delete/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -256,6 +265,8 @@ namespace courseA4.Controllers
         // POST: Recipes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("Admin")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var recipe = await _context.Recipes.FindAsync(id);

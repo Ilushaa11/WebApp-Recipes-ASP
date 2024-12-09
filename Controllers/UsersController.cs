@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using courseA4.Data;
 using courseA4.Models;
+using courseA4.Services;
 
 namespace courseA4.Controllers
 {
@@ -20,6 +21,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Users
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Index(int ? page)
         {
             int pageSize = 10;
@@ -44,6 +46,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Users/Details/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -62,6 +65,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Users/Create
+        [CustomAuthorize("Admin")]
         public IActionResult Create()
         {
             return View();
@@ -72,6 +76,7 @@ namespace courseA4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Create([Bind("UserId,Login,PasswordHash,Email")] User user)
         {
             if (ModelState.IsValid)
@@ -84,6 +89,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Users/Edit/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,6 +110,7 @@ namespace courseA4.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,Login,PasswordHash,Email")] User user)
         {
             if (id != user.UserId)
@@ -135,6 +142,7 @@ namespace courseA4.Controllers
         }
 
         // GET: Users/Delete/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -155,6 +163,7 @@ namespace courseA4.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users.FindAsync(id);

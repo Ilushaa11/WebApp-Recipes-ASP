@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using courseA4.Data;
 using courseA4.Models;
+using courseA4.Services;
 
 namespace courseA4.Controllers
 {
@@ -152,6 +153,7 @@ namespace courseA4.Controllers
         }
 
         // GET: RecipeSteps/Delete/5
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -174,6 +176,7 @@ namespace courseA4.Controllers
         // POST: RecipeSteps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize("Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var recipeStep = await _context.RecipeSteps.FindAsync(id);

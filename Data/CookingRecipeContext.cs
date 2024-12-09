@@ -129,6 +129,7 @@ public partial class CookingRecipeContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Login).HasMaxLength(50);
             entity.Property(e => e.PasswordHash).HasMaxLength(256);
+            entity.Property(e => e.Access).HasMaxLength(256);
         });
 
         OnModelCreatingPartial(modelBuilder);

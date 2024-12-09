@@ -1,6 +1,7 @@
 using courseA4.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace courseA4.Controllers
 {
@@ -15,6 +16,9 @@ namespace courseA4.Controllers
 
         public IActionResult Index()
         {
+            var role = User?.FindFirst(ClaimTypes.Role)?.Value;
+
+            ViewData["Role"] = role;
             return View();
         }
 

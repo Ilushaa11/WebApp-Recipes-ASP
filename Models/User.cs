@@ -13,5 +13,6 @@ public partial class User
 
     public string? Email { get; set; }
 
+    public string? Access { get; set; }
     public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
 }
